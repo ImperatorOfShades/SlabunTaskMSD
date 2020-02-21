@@ -14,17 +14,29 @@ namespace CSharpTest
             if (weekEnds != null)
             {
                 TimeSpan dateDifference;
-                int comparation, weekEndsDuration;
-                enddate = startDate.AddDays(dayCount - 1);
+                int comparation1, comparation2, weekEndsDuration;
+                enddate = startDate;
+                enddate = enddate.AddDays(dayCount - 1);
                 foreach (var weekEnd in weekEnds)
                 {
-                    comparation = DateTime.Compare(enddate, weekEnd.StartDate);
-                    if (comparation >= 0)
+                    comparation1 = DateTime.Compare(startDate, weekEnd.EndDate);
+                    comparation2 = DateTime.Compare(weekEnd.StartDate, startDate);
+                    if (comparation1 <= 0 && comparation2 <= 0)
+                    {
+                        dateDifference = weekEnd.EndDate - startDate;
+                        weekEndsDuration = dateDifference.Days + 1;
+                        enddate = enddate.AddDays(weekEndsDuration);
+                    }
+
+                    comparation1 = DateTime.Compare(enddate, weekEnd.StartDate);
+                    comparation2 = DateTime.Compare(startDate, weekEnd.StartDate);
+                    if (comparation1 >= 0 && comparation2 <0)
                     {
                         dateDifference = weekEnd.EndDate - weekEnd.StartDate;
                         weekEndsDuration = dateDifference.Days + 1;
                         enddate = enddate.AddDays(weekEndsDuration);
                     }
+                    
                 }
             }
             else
